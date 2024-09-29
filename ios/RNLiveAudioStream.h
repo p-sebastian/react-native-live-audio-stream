@@ -17,3 +17,4 @@ typedef struct {
 @interface RNLiveAudioStream: RCTEventEmitter <RCTBridgeModule>
     @property (nonatomic, assign) AQRecordState recordState;
 @end
+ 
