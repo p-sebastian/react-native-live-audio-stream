@@ -9,7 +9,6 @@ typedef struct {
     AudioStreamBasicDescription mDataFormat;
     AudioQueueRef               mQueue;
     AudioQueueBufferRef         mBuffers[kNumberBuffers];
-    AudioFileID                 mAudioFile;
     UInt32                      bufferByteSize;
     SInt64                      mCurrentPacket;
     bool                        mIsRunning;
@@ -17,6 +16,5 @@ typedef struct {
 
 @interface RNLiveAudioStream: RCTEventEmitter <RCTBridgeModule>
     @property (nonatomic, assign) AQRecordState recordState;
-    @property (nonatomic, strong) NSString* filePath;
 @end
  

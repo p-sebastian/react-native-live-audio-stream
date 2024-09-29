@@ -17,10 +17,6 @@ RCT_EXPORT_METHOD(init:(NSDictionary *) options) {
     _recordState.mDataFormat.mFormatFlags       = _recordState.mDataFormat.mBitsPerChannel == 8 ? kLinearPCMFormatFlagIsPacked : (kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked);
     _recordState.bufferByteSize                 = options[@"bufferSize"] == nil ? 2048 : [options[@"bufferSize"] unsignedIntValue];
     _recordState.mSelf = self;
-    
-    NSString *fileName = options[@"wavFile"] == nil ? @"audio.wav" : options[@"wavFile"];
-    NSString *docDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    _filePath = [NSString stringWithFormat:@"%@/%@", docDir, fileName];
 }
 
 RCT_EXPORT_METHOD(start) {
@@ -59,15 +55,6 @@ RCT_EXPORT_METHOD(start) {
     }
 
     _recordState.mIsRunning = true;
-    
-    CFURLRef url = CFURLCreateWithString(kCFAllocatorDefault, (CFStringRef)_filePath, NULL);
-    OSStatus audioFileStatus = AudioFileCreateWithURL(url, kAudioFileWAVEType, &_recordState.mDataFormat, kAudioFileFlags_EraseFile, &_recordState.mAudioFile);
-    CFRelease(url);
-    
-    if (audioFileStatus != noErr) {
-        RCTLog(@"[RNLiveAudioStream] Failed to create audio file. Status: %d", (int)audioFileStatus);
-        return;
-    }
     
     // Dispose of any existing queue before starting a new one
     if (_recordState.mQueue != NULL) {
@@ -116,21 +103,10 @@ RCT_EXPORT_METHOD(stop:(RCTPromiseResolveBlock)resolve
             _recordState.mQueue = NULL;
         }
 
-        // Close the audio file
-        if (_recordState.mAudioFile != NULL) {
-            AudioFileClose(_recordState.mAudioFile);
-            _recordState.mAudioFile = NULL;
-        }
         [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
         [audioSession setMode:AVAudioSessionModeMoviePlayback error:nil];
 
-        // Resolve promise with the file path
-        resolve(_filePath);
-
-        // Log file size
-        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:_filePath error:nil] fileSize];
-        RCTLogInfo(@"File path: %@", _filePath);
-        RCTLogInfo(@"File size: %llu", fileSize);
+        resolve(nil);
     } else {
         RCTLogInfo(@"Recording is not running, skipping stop.");
         resolve(nil);
@@ -149,17 +125,7 @@ void HandleInputBuffer(void *inUserData,
         return;
     }
 
-    if (AudioFileWritePackets(pRecordState->mAudioFile,
-                              false,
-                              inBuffer->mAudioDataByteSize,
-                              inPacketDesc,
-                              pRecordState->mCurrentPacket,
-                              &inNumPackets,
-                              inBuffer->mAudioData
-                              ) == noErr) {
-        pRecordState->mCurrentPacket += inNumPackets;
-    }
-    
+
     short *samples = (short *) inBuffer->mAudioData;
     long nsamples = inBuffer->mAudioDataByteSize;
     NSData *data = [NSData dataWithBytes:samples length:nsamples];
