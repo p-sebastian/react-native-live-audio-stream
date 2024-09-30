@@ -106,6 +106,9 @@ RCT_EXPORT_METHOD(stop:(RCTPromiseResolveBlock)resolve
         [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
         [audioSession setMode:AVAudioSessionModeMoviePlayback error:nil];
 
+        NSString *str = @"end";
+        [self sendEventWithName:@"data" body:str];
+        
         resolve(nil);
     } else {
         RCTLogInfo(@"Recording is not running, skipping stop.");
