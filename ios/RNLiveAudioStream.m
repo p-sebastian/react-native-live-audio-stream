@@ -132,8 +132,14 @@ void HandleInputBuffer(void *inUserData,
     short *samples = (short *) inBuffer->mAudioData;
     long nsamples = inBuffer->mAudioDataByteSize;
     NSData *data = [NSData dataWithBytes:samples length:nsamples];
-    NSString *str = [data base64EncodedStringWithOptions:0];
-    [pRecordState->mSelf sendEventWithName:@"data" body:str];
+    NSData* compressed = [data zlibDeflate];
+//    NSData *data = [NSData dataWithBytes:samples length:nsamples];
+    NSMutableArray *byteArray = [NSMutableArray compressed.length];
+    const uint8_t *bytes = [compressedData bytes];
+    for (NSUInteger i = 0; i < compressedData.length; i++) {
+        [byteArray addObject:@(bytes[i])];
+    }
+    [pRecordState->mSelf sendEventWithName:@"data" body:byteArray];
 
     AudioQueueEnqueueBuffer(pRecordState->mQueue, inBuffer, 0, NULL);
 }

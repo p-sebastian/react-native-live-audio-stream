@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,10 @@
 		49C5D76024407376003D418B /* libRNLiveAudioStream.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNLiveAudioStream.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		9EF667822CABF33600DBBF13 /* Compression */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Compression; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		58B511D81A9E6C8500147676 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -42,6 +46,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				9EF667822CABF33600DBBF13 /* Compression */,
 				49C5D750243FA7A5003D418B /* RNLiveAudioStream.h */,
 				49C5D74F243FA7A5003D418B /* RNLiveAudioStream.m */,
 				49C5D76024407376003D418B /* libRNLiveAudioStream.a */,
@@ -73,6 +78,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9EF667822CABF33600DBBF13 /* Compression */,
 			);
 			name = RNLiveAudioStream;
 			productName = RCTDataManager;
