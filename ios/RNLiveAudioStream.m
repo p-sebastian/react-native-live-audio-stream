@@ -1,4 +1,5 @@
 #import "RNLiveAudioStream.h"
+#import "Compression/NSData+Compression.h"
 
 @implementation RNLiveAudioStream
 
@@ -132,11 +133,10 @@ void HandleInputBuffer(void *inUserData,
     short *samples = (short *) inBuffer->mAudioData;
     long nsamples = inBuffer->mAudioDataByteSize;
     NSData *data = [NSData dataWithBytes:samples length:nsamples];
-    NSData* compressed = [data zlibDeflate];
-//    NSData *data = [NSData dataWithBytes:samples length:nsamples];
-    NSMutableArray *byteArray = [NSMutableArray compressed.length];
-    const uint8_t *bytes = [compressedData bytes];
-    for (NSUInteger i = 0; i < compressedData.length; i++) {
+    NSData* compressed = [data gzipCompress];
+    NSMutableArray *byteArray = [NSMutableArray arrayWithCapacity:compressed.length];
+    const uint8_t *bytes = [compressed bytes];
+    for (NSUInteger i = 0; i < compressed.length; i++) {
         [byteArray addObject:@(bytes[i])];
     }
     [pRecordState->mSelf sendEventWithName:@"data" body:byteArray];
