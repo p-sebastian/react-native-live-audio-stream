@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
   s.description    = package['description']
   s.license        = package['license']
   s.author         = package['author']
-  s.homepage       = "https://github.com/xiqi/react-native-live-audio-stream"
-  s.source         = { :git => 'https://github.com/xiqi/react-native-live-audio-stream.git' }
+  s.homepage       = "https://github.com/p-sebastian/react-native-live-audio-stream"
+  s.source         = { :git => 'https://github.com/p-sebastian/react-native-live-audio-stream.git' }
 
   s.requires_arc   = true
   s.ios.deployment_target = '8.0'
